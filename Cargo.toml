@@ -3,7 +3,11 @@ name = "chess"
 version = "0.1.0"
 authors = ["T-O-R-U-S <bageliq@protonmail.com>"]
 edition = "2018"
+license="DUH"
+license-file="LICENSE.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror = "*"
+anyhow = "*"

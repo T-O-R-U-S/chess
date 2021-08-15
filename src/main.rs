@@ -1,3 +1,13 @@
+mod pieces;
+mod errors;
+
+use pieces::*;
+
 fn main() {
-    println!("Hello, world!");
+	let board = vec![
+		vec![],
+		Pawn::pawn_rank(1)
+	];
+
+	println!("{:#?}", board)
 }
