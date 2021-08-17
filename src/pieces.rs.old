@@ -1,0 +1,125 @@
+// TODO: Make use of this!
+#[allow(dead_code)]
+pub enum Side {
+	Black = -1,
+	White = 1,
+}
+
+/// The piece trait. This guarantees that every single piece
+/// can move.
+pub trait Piece {
+	/// The movement function. Returns either an error, or a
+	/// vector containing the new position.
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error>;
+	fn new(x: usize, y: usize) -> Option<Self>
+	where
+		Self: Sized,
+	{
+		Some(Self::This { x, y })
+	}
+}
+
+/// The pawn. This piece can only move forwards, and can only take diagonally (by 1 square).
+#[derive(Debug, Clone, Copy)]
+pub struct Pawn {
+	pub y: usize,
+	pub x: usize,
+}
+
+impl Piece for Pawn {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x.clone(), self.y.clone()])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+impl Pawn {
+	pub fn pawn_rank(y: usize) -> [Option<Self>; 8] {
+		let mut rank: [_; 8] = [None; 8];
+
+		for x in 0..rank.len() {
+			rank[x] = Pawn::new(x, y)
+		}
+
+		rank
+	}
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Knight {
+	x: usize,
+	y: usize,
+}
+
+impl Piece for Knight {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x, self.y])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Bishop {
+	x: usize,
+	y: usize,
+}
+
+impl Piece for Bishop {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x, self.y])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Rook {
+	x: usize,
+	y: usize,
+}
+
+impl Piece for Rook {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x, self.y])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Queen {
+	x: usize,
+	y: usize,
+}
+
+impl Piece for Queen {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x, self.y])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct King {
+	pub x: usize,
+	pub y: usize,
+}
+
+impl Piece for King {
+	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
+		Ok(vec![self.x.clone(), self.y.clone()])
+	}
+	fn new(x: usize, y: usize) -> Option<Self> {
+		Some(Self { x, y })
+	}
+}
+
+pub fn back_rank(y: usize) {}

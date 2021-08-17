@@ -1,65 +1,43 @@
-// TODO: Make use of this!
-#[allow(dead_code)]
-enum Side {
-	Black = -1,
-	White = 1
-}
-
-/// The piece trait. This guarantees that every single piece
-/// will have a defined set of functions for movement and creation
-/// (for when being placed on the board.)
-pub trait Piece {
-	/// The movement function. Returns a result.
-	fn movement(&self) -> Result<Vec<usize>, anyhow::Error>;
-	fn new(x: usize, y: usize) -> Self;
-}
-
-
-/// The pawn. This piece can only move forwards, and can only take diagonally (by 1 square).
 #[derive(Debug, Clone, Copy)]
-pub struct Pawn {
-	pub x: usize,
-	pub y: usize,
+pub enum Side {
+	White = 1,
+	Black = -1
 }
 
-impl Piece for Pawn {
-	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
-		Ok(vec![self.x.clone(), self.y.clone()])
-	}
-	fn new(x: usize, y: usize) -> Pawn {
-		Pawn {
-			x: x,
-			y: y
-		}
-	}
+#[derive(Debug, Clone, Copy)]
+pub enum Piece {
+	// In format of:
+	// Piece name (x position, y position, notation)
+	Pawn(usize, usize, Side),
+	Knight(usize, usize, Side),
+	Bishop(usize, usize, Side),
+	Rook(usize, usize, Side),
+	Queen(usize,usize, Side),
+	King(usize, usize, Side),
 }
 
-impl Pawn {
-	pub fn pawn_rank(y: usize) -> Vec<Pawn> {
-		let mut rank = Vec::with_capacity(8);
+impl Piece {
+	pub fn movement(&mut self) {
 
-		for x in 0..8 {
-			rank.push(Pawn::new(x, y))
-		}
-
-		rank
 	}
 }
 
 #[derive(Debug, Clone, Copy)]
-struct King {
-	x: usize,
-	y: usize,
+pub enum PieceOption {
+	Some(Piece),
+	None
 }
 
-impl Piece for King {
-	fn movement(&self) -> Result<Vec<usize>, anyhow::Error> {
-		Ok(vec![self.x.clone(), self.y.clone()])
-	}
-	fn new(x: usize, y: usize) -> King {
-		King {
-			x: x,
-			y: y
+impl std::fmt::Display for PieceOption {
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+		match *self {
+			PieceOption::Some(Piece::  Pawn(_, _, _)) => write!(f, "P"),
+			PieceOption::Some(Piece::Knight(_, _, _)) => write!(f, "N"),
+			PieceOption::Some(Piece::Bishop(_, _, _)) => write!(f, "B"),
+			PieceOption::Some(Piece::  Rook(_, _, _)) => write!(f, "R"),
+			PieceOption::Some(Piece:: Queen(_, _, _)) => write!(f, "Q"),
+			PieceOption::Some(Piece::  King(_, _, _)) => write!(f, "K"),
+			PieceOption::None => write!(f, " ")
 		}
 	}
 }
