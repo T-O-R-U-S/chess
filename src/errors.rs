@@ -2,12 +2,9 @@ use thiserror::Error;
 
 #[allow(dead_code)]
 #[derive(Error, Debug)]
-enum PieceError {
+pub enum PieceError {
 	#[error("You made an illegal move.")]
-	IllegalMove {
-		former_pos: Vec<usize>,
-		desired_pos: Vec<usize>
-	},
+	IllegalMove,
 	#[error("You are in check!")]
 	InCheck,
 	#[error("Your piece is pinned to your king!")]
