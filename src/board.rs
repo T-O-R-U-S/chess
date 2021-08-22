@@ -14,7 +14,7 @@ impl Board {
 	pub fn pawn_rank(y: isize, side: Side) -> [PieceOption; 8] {
 		let mut rank = [PieceOption::None; 8];
 		for x in 0..8 {
-			rank[x] = PieceOption::Some(Piece::Pawn(x as isize, y, side))
+			rank[x] = PieceOption::Some(Piece::Pawn(x as isize, y, side, false))
 		}
 		rank
 	}
@@ -36,7 +36,7 @@ impl Board {
 		[PieceOption::None; 8]
 	}
 	pub fn new() -> Board {
-		let mut board = Self {
+		let board = Self {
 			board: [
 					Board::back_rank(0, Side::Black),
 					Board::pawn_rank(1, Side::Black),
