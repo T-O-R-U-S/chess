@@ -3,6 +3,7 @@ use crate::errors::PieceError;
 use anyhow::Result;
 use console::style;
 use console::Color;
+use anyhow::anyhow;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Side {
@@ -50,65 +51,42 @@ pub enum Piece {
 
 
 impl Piece {
-	fn to_option(&self) -> PieceOption {
-		PieceOption::Some(*self)
+	fn to_option(&self) -> Option<Piece> {
+		Some(*self)
 	}
-	pub fn set_pos(&self, prev_pos:(isize, isize), new_pos: (isize, isize), board: &mut Board) -> PieceOption {
-		board[(prev_pos.0, prev_pos.1)] = PieceOption::None;
-		board[(new_pos.0, new_pos.1)] = self.to_option();
-		PieceOption::Some(*self)
+	pub fn set_pos(&self, prev_pos:(isize, isize), new_pos: (isize, isize), board: &mut Board) -> Option<Piece> {
+		board[prev_pos] = None;
+		board[ new_pos] = self.to_option();
+		Some(*self)
 	}
-	pub fn style(&self, notation: &'static str, s: Side) -> console::StyledObject<&'static str> {
+	pub fn style(notation: &'static str, s: Side) -> console::StyledObject<&'static str> {
 		style(notation).bg(s.color()).fg(s.fg())
 	}
-	pub fn movement(&mut self, new_pos: (isize, isize), board: &mut Board) -> Result<(), PieceError> {
+	pub fn movement(&mut self, new_pos: (isize, isize), board: &mut Board) -> Result<()> {
 		match *self {
 			Piece::  Pawn(x, y, s, has_moved) => {
-				if new_pos.0 != x {
-					return Err(PieceError::IllegalMove)
-				}
-				if !has_moved && new_pos.1 == y+(s*2) {
-					return Ok(())
+				/*
+				if new_pos.0 != x || new_pos.0 != x+1 || new_pos.0 == x-1 {
+					return Err(anyhow!(PieceError::IllegalMove))
 				}
 				if new_pos.1 == y+(s*1) {
 					self.set_pos((x, y), new_pos, board);
-					println!("{:?}", board[(x, new_pos.1)]);
-					println!("{}", board);
 					return Ok(())
 				}
-				return Err(PieceError::IllegalMove)
+				if !has_moved && new_pos.1 == y+(s*2) {
+					self.set_pos((x, y), new_pos, board);
+					return Ok(())
+				} */
+				let default = || {
+
+				};
+
+				let x_1 = x+1;
+				let y_1 = y+1;
+
+				Err(anyhow!(PieceError::IllegalMove))
 			},
 			_ => unimplemented!()
-		}
-	}
-}
-
-#[derive(Debug, Clone, Copy)]
-pub enum PieceOption {
-	Some(Piece),
-	None
-}
-
-impl PieceOption {
-	pub fn unwrap(self) -> Piece {
-		match self {
-			PieceOption::Some(val) => val,
-			PieceOption::None => panic!("uh oh :(")
-		}
-	}
-	pub fn is_some(&self) -> bool {
-		match *self {
-			PieceOption::Some(_) => true,
-			PieceOption::None => false
-		}
-	}
-}
-
-impl std::fmt::Display for PieceOption {
-	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-		match *self {
-			PieceOption::Some(val) => val.fmt(f),
-			PieceOption::None => write!(f, "{}", style(".").bg(Color::Color256(243)).fg(Color::White))
 		}
 	}
 }
@@ -117,12 +95,12 @@ impl std::fmt::Display for Piece {
 	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
 
 		match *self {
-			Piece::Pawn(_, _, s, _) => write!(f, "{}", self.style("P", s)),
-			Piece::Knight(_, _, s)  => write!(f, "{}", self.style("K", s)),
-			Piece::Bishop(_, _, s)  => write!(f, "{}", self.style("B", s)),
-			Piece::  Rook(_, _, s)  => write!(f, "{}", self.style("R", s)),
-			Piece:: Queen(_, _, s)  => write!(f, "{}", self.style("Q", s)),
-			Piece::  King(_, _, s)  => write!(f, "{}", self.style("K", s)),
+			Piece::Pawn(_, _, s, _) => write!(f, "{}", Self::style("P", s)),
+			Piece::Knight(_, _, s,) => write!(f, "{}", Self::style("K", s)),
+			Piece::Bishop(_, _, s,) => write!(f, "{}", Self::style("B", s)),
+			Piece::  Rook(_, _, s,) => write!(f, "{}", Self::style("R", s)),
+			Piece:: Queen(_, _, s,) => write!(f, "{}", Self::style("Q", s)),
+			Piece::  King(_, _, s,) => write!(f, "{}", Self::style("K", s)),
 		}
 	}
 }

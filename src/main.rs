@@ -8,6 +8,9 @@ fn main() {
 
 	println!("{}", board);
 
-	board[(0, 1)].unwrap().movement((0, 2), &mut board).unwrap();
-	board[(0,6)].unwrap().movement((0,5), &mut board).unwrap();
+	board[(3, 1)].unwrap().movement((3, 3), &mut board).unwrap();
+	board[(3,6)].unwrap().movement((3,5), &mut board).unwrap();
+	
+
+	println!("{}", board)
 }

@@ -10,5 +10,5 @@ pub enum PieceError {
 	#[error("Your piece is pinned to your king!")]
 	DiscoverCheck,
 	#[error("There was no piece in your selected tile!")]
-	EmptyTile
+	EmptyTile,
 }
